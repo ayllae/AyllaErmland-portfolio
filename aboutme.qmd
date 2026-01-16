@@ -16,7 +16,7 @@ Through this course, I hope to strengthen my theoretical understanding of statis
 
 ## Interesting Data Analysis Material
 
-One visualization resource I particularly enjoy is the *Color Palette Finder for R*, an interactive tool that helps explore and select color palettes for R graphics. It’s especially useful for making plots both clear and visually beautiful! https://r-graph-gallery.com/color-palette-finder
+One visualization resource I particularly enjoy is the *Color Palette Finder for R*, an interactive tool that helps explore and select color palettes for R graphics. It’s especially useful for making plots both clear and visually beautiful! [Color Palette Finder for R](https://r-graph-gallery.com/color-palette-finder)
 
 ## A Bit More About Me
 
