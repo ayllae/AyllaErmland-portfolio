@@ -6,8 +6,8 @@ title: "Data Analysis Exercise"
 
 # load dslabs package
 library("dslabs") 
-library(dplyr)
-library(ggplot2)
+library("dplyr")
+library("ggplot2")
 
 # get an overview of data structure
 str(gapminder)
