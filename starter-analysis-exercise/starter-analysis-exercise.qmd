@@ -227,7 +227,7 @@ I fitted two simple linear regression models using the lm() function on African 
    - The model shows a negative correlation between infant mortality and life expectancy.
    - The estimate for infant mortality is negative and statistically significant (very low p-value), which confirms this inverse relationship.
 
-2. **Model 2 (`fit2`)**: Life expectancy as a function of population size.
+2. **Model 2 (fit2)**: Life expectancy as a function of population size.
    - This model shows not a strong correlation between population size and life expectancy.
    - The p-value is likely not significant.
 
