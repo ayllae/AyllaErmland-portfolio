@@ -17,6 +17,9 @@ summary(gapminder)
 # determine the type of object gapminder is
 class(gapminder)
 
+africadata <- gapminder %>%
+  filter(continent == "Africa")
+
 # Create a new data frame with only 'infant_mortality' and 'life_expectancy'
 africa_mort_life <- africadata %>%
   select(infant_mortality, life_expectancy)
@@ -45,10 +48,6 @@ Both data frames contain 2907 rows (one for each African country-year observatio
 ```{r}
 # Load dplyr package
 library(dplyr)
-
-# Create africadata, filter rows where continent is Africa
-africadata <- gapminder %>%
-  filter(continent == "Africa")
 
 # Create the object with infant_mortality and life_expectancy
 africa_mort_life <- africadata %>%
