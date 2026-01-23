@@ -142,3 +142,57 @@ Model 2 (fit2): Life expectancy as a function of population size.
 - The p-value and r-quared are not significant.
 
 In the year 2000, infant mortality is a stronger predictor of life expectancy than population size, at least in the year 2000 in Africa. 
+
+
+```{r}
+# Additional Data Exploration – this part was contributed by Talia C. Swanson
+
+library(dslabs)
+library(dplyr)
+library(ggplot2)
+
+# Upload chosen dataset
+data("historic_co2")
+
+# Check structure of data
+str(historic_co2)
+
+# You will preview data and look at your descriptive stats
+head(historic_co2)
+summary(historic_co2)
+
+# Displaying all points in the historic_co2 dataset
+historic_co2
+
+# Plotting CO2 concentration over time
+ggplot(historic_co2, aes(x = year, y = co2)) +
+  geom_line(color = "blue", size = 1) +
+  labs(title = "Historical CO2 Concentration Over Time",
+       x = "Year",
+       y = "CO2 (ppm)") +
+  theme_minimal()
+
+```
+
+The historic_co2 dataset contains atmospheric CO₂ concentrations measured over time with the first table showing the first few observations within the dataset. Within this visualization, CO₂ concentrations have increased steadily from the mid 1900's onward. There are small fluctuations throughout the years, however, the general trend is moving upwards indictaing a long-term rise in atmospheric CO₂ levels. 
+
+
+
+```{r}
+# Filter for recent years 2000 onwards as target
+recent_co2 <- historic_co2 %>% filter(year >= 2000)
+
+# Display the table of points used in the plot (for recent years)
+recent_co2
+
+# This will plot our graph of atmospheric CO2 for years 2000 and above
+ggplot(recent_co2, aes(x = year, y = co2)) +
+  geom_line(color = "red") +
+  geom_point(color = "darkred") +
+  labs(title = "CO2 Levels Since 2000",
+       x = "Year",
+       y = "CO2 (ppm)") +
+  theme_minimal()
+```
+
+This visualization focuses on CO₂ levels from the year 2000 to the present. During this period, CO₂ concetrations continue to increase at a steady rate without any major decreases or fluctuations. This suggests that atmospheric CO₂ have consistently risen in more recent years 
