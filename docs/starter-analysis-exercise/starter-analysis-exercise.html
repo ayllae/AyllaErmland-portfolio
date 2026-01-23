@@ -500,6 +500,141 @@ Coefficients:
 <p>Model 1 (fit1): Life expectancy as a function of infant mortality. - The model shows a negative correlation between infant mortality and life expectancy. - The estimate for infant mortality is negative and statistically significant (very low p-value), which confirms this inverse relationship.</p>
 <p>Model 2 (fit2): Life expectancy as a function of population size. - This model shows not a strong correlation between population size and life expectancy. - The p-value and r-quared are not significant.</p>
 <p>In the year 2000, infant mortality is a stronger predictor of life expectancy than population size, at least in the year 2000 in Africa.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Additional Data Exploration – this part was contributed by Talia C. Swanson</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload chosen dataset</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"historic_co2"</span>)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying all points in the historic_co2 dataset</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>historic_co2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 694 × 3
+    year   co2 source   
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+ 1  1959  316. Mauna Loa
+ 2  1960  317. Mauna Loa
+ 3  1961  318. Mauna Loa
+ 4  1962  318. Mauna Loa
+ 5  1963  319. Mauna Loa
+ 6  1964  320. Mauna Loa
+ 7  1965  320. Mauna Loa
+ 8  1966  321. Mauna Loa
+ 9  1967  322. Mauna Loa
+10  1968  323. Mauna Loa
+# ℹ 684 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check structure of data</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(historic_co2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [694 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ year  : num [1:694] 1959 1960 1961 1962 1963 ...
+ $ co2   : num [1:694] 316 317 318 318 319 ...
+ $ source: chr [1:694] "Mauna Loa" "Mauna Loa" "Mauna Loa" "Mauna Loa" ...</code></pre>
+</div>
+</div>
+<p>The str( ) function shows the structure of the historic_co2 dataset. It has 694 total observations and 3 variables, year – the year of measurement co2 – the CO₂ concentration source – the measurement source</p>
+<p>This helps us understand the type of data we’re working with and confirms that the dataset is ready for analysis and visualization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You will preview beginning data and look at your descriptive stats</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(historic_co2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+   year   co2 source   
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+1  1959  316. Mauna Loa
+2  1960  317. Mauna Loa
+3  1961  318. Mauna Loa
+4  1962  318. Mauna Loa
+5  1963  319. Mauna Loa
+6  1964  320. Mauna Loa</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(historic_co2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      year              co2           source         
+ Min.   :-803182   Min.   :177.7   Length:694        
+ 1st Qu.:-470498   1st Qu.:206.7   Class :character  
+ Median : -43278   Median :236.9   Mode  :character  
+ Mean   :-219753   Mean   :245.9                     
+ 3rd Qu.:  -8924   3rd Qu.:271.8                     
+ Max.   :   2018   Max.   :408.5                     </code></pre>
+</div>
+</div>
+<p>The head( ) function displays the first 6 rows of the dataset. From this, we can see that CO₂ concentrations start around 316 ppm in 1959 from Mauna Loa and that measurements are chronological.</p>
+<p>The summary( ) function provides descriptive statistics for each variable we have, year, source, and co2 concentration.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting CO2 concentration over all time</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(historic_co2, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> co2)) <span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Historical CO2 Concentration Over Time"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"CO2 (ppm)"</span>) <span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="starter-analysis-exercise_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The historic_co2 dataset contains atmospheric CO₂ concentrations measured over time with the first table showing the first few observations within the dataset. Within this visualization, CO₂ concentrations have increased steadily from the mid 1900’s onward. There are small fluctuations of increasing and decreasing behavior throughout the years, however, the general trend is moving upwards indictaing a long-term rise in atmospheric CO₂ levels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for recent years 2000 onwards as target</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>recent_co2 <span class="ot">&lt;-</span> historic_co2 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2000</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table of points used in the plot (for recent years)</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>recent_co2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 3
+    year   co2 source   
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+ 1  2000  370. Mauna Loa
+ 2  2001  371. Mauna Loa
+ 3  2002  373. Mauna Loa
+ 4  2003  376. Mauna Loa
+ 5  2004  378. Mauna Loa
+ 6  2005  380. Mauna Loa
+ 7  2006  382. Mauna Loa
+ 8  2007  384. Mauna Loa
+ 9  2008  386. Mauna Loa
+10  2009  387. Mauna Loa
+11  2010  390. Mauna Loa
+12  2011  392. Mauna Loa
+13  2012  394. Mauna Loa
+14  2013  397. Mauna Loa
+15  2014  399. Mauna Loa
+16  2015  401. Mauna Loa
+17  2016  404. Mauna Loa
+18  2017  407. Mauna Loa
+19  2018  409. Mauna Loa
+20  2001  368. Ice Cores</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will plot our graph of atmospheric CO2 for years 2000 and above</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(recent_co2, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> co2)) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"CO2 Levels Since 2000"</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"CO2 (ppm)"</span>) <span class="sc">+</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="starter-analysis-exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This visualization focuses on CO₂ levels from the year 2000 to the present. During this period, CO₂ concetrations continue to increase at a steady rate without any major decreases or fluctuations. This suggests that atmospheric CO₂ have consistently risen in more recent years.</p>
 
 
 
