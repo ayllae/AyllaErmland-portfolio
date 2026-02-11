@@ -201,6 +201,9 @@ I'm recreating the cleaned dataset (flu_trimmed) using synthetic data (at least 
 _Disclaimer: Code for synthesizing data in R was aided with chatGPT with the description above._
 
 ```{r}
+
+library(ggplot2) 
+
 #Preparing variables: dates, races, age_groups
 
 dates <- as.POSIXct(c("2020-12-15 12:00:00", "2021-01-15 12:00:00", "2021-02-15 12:00:00"), tz = "America/New_York")
