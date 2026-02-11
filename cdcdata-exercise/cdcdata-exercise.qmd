@@ -189,6 +189,7 @@ ggplot(flu_trimmed, aes(x = Sample_Size)) +
   )
 
 ```
+
 **This section is contributed by: Emil Joson**
 
 I'm recreating the cleaned dataset (flu_trimmed) using synthetic data (at least enough to recreate the figures above). Specifically, I'm aiming for a dataset with 5 columns and 140 rows. The 5 columns are:
