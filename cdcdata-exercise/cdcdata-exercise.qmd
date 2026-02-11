@@ -189,3 +189,106 @@ ggplot(flu_trimmed, aes(x = Sample_Size)) +
   )
 
 ```
+**This section is contributed by: Emil Joson**
+
+I'm recreating the cleaned dataset (flu_trimmed) using synthetic data (at least enough to recreate the figures above). Specifically, I'm aiming for a dataset with 5 columns and 140 rows. The 5 columns are:
+  1. collection_date (Dec 2020, Jan 2021, Feb 2021)
+  2. race (Black, Non-Hispanic; White, Non-Hispanic; Other, Non-Hispanic; Hispanic; Overall; [equal distribution])
+  3. age_group (18-49; 50-64; 65+; All Adults (18+); [equal distribution])
+  4. coverage (1-100%; [normal distribution])
+  5. sample_size (1-1000; [left-skewed]) 
+
+_Disclaimer: Code for synthesizing data in R was aided with chatGPT with the description above._
+
+```{r}
+#Preparing variables: dates, races, age_groups
+
+dates <- as.POSIXct(c("2020-12-15 12:00:00", "2021-01-15 12:00:00", "2021-02-15 12:00:00"), tz = "America/New_York")
+
+races <- c("White, non-Hispanic", "Hispanic", "Black, non-Hispanic", "Other, non-Hispanic", "Overall")
+
+age_groups <- c("18–49", "50–64", "65+", "All adults (18+)")
+```
+
+
+```{r}
+#Preparing the dataframe
+base_grid <- expand.grid(race = races, age_group = age_groups, stringsAsFactors = FALSE)
+
+synthetic <- base_grid[rep(seq_len(nrow(base_grid)), times = 7), ]
+
+nrow(synthetic) #confirming 140 rows
+```
+
+At this point, the dataframe now has both races and age groups. Because of how they're made, we've made sure that they're equally distributed - just like in the cleaned dataset above.
+
+```{r}
+E1 <- ggplot(synthetic, aes(x = race))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle=90))
+
+E2 <- ggplot(synthetic, aes(x = age_group))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle=90))
+
+library(gridExtra)
+grid.arrange(E1, E2, ncol = 2, nrow =1)
+```
+
+Continuing with adding more variables to the dataframe, here I'm adding dates. I only specified three entries (Dec 2020, Jan 2021, Feb 2021) but I didn't specify the distribution. I just wanted to see what the AI would default to.
+
+```{r}
+#Adding collection dates to the dataframe
+n <- 140
+date_vec <- rep(dates, length.out = n)
+date_vec <- sample(date_vec)  # shuffle so dates aren’t in blocks
+synthetic$data_collection_date <- date_vec
+
+ggplot(synthetic, aes(x = data_collection_date))+
+  geom_bar()
+```
+
+The dates here are more equally distributed than the cleaned dataset above. 
+
+Next, the sample sizes. In order to recreate the distribution shape of the cleaned dataset above, I specified the prompt to produce a left-skewed distribution.
+
+```{r}
+#Adding sample sizes to the data frame
+raw_n <- rexp(n, rate = 1/120)      # exponential; mean ~120 (lots of small values)
+sample_size <- pmin(pmax(round(raw_n), 1), 1000)
+
+synthetic$sample_size <- sample_size
+
+ggplot(synthetic, aes(x = sample_size))+
+  geom_histogram()
+```
+
+The synthetic data produced here does lean toward the left. However, I think the cleaned dataset above was way more skewed. 
+
+Lastly, vaccination coverage. I specfified the prompt that this variable should exhibit a normal distribution just like the cleaned dataset above.
+
+```{r}
+#Adding vaccination coverage to the dataframe
+coverage <- rnorm(n, mean = 55, sd = 12)
+coverage <- pmin(pmax(coverage, 0), 100)
+synthetic$coverage <- coverage
+
+#Grabbing the code from above to produce the figure
+ggplot(synthetic, aes(x = coverage)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "black", color = "black", na.rm = TRUE) +
+  #Add a normal distribution curve using the mean and SD from the data:
+  stat_function(
+    fun = dnorm,
+    args = list(
+      mean = mean(synthetic$coverage),
+      sd = sd(synthetic$coverage)
+    ),
+    color = "red"
+  ) +
+  labs(
+    title = "Vaccination coverage",
+    x = "Coverage (%)",
+    y = "Density"
+  )
+```
+
