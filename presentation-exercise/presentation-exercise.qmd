@@ -214,7 +214,15 @@ state_table <- state_data %>%
     data_row.padding = px(10)
   ) %>%
   
-  #Generating interactive footnotes:
+  #Automatic conditional formatting
+  tab_style(
+    style = cell_fill(color = "#DCE3F5"),
+    locations = cells_body(
+      columns = pet_peeve_1,
+      rows = pet_peeve_1 == "Finding a dog sitter"
+    )
+  ) %>%
+  
   tab_source_note(
     source_note = md(
       "*Source:* [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"
