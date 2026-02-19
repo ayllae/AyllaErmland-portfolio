@@ -18,6 +18,7 @@ To reproduce this graph first we will import its data file: Top_Pet_Peeves_Of_Do
 library(tidyverse)
 library(scales)
 library(here)
+library(patchwork)
 ```
 
 ```{r}
@@ -48,24 +49,26 @@ forbs_data <- forbs_data %>%
 ```
 
 
-```{r}
-#Create the plot:
-ggplot(forbs_data, aes(x = percentage, y = `Pet peeve`)) +
+```{r fig.width=14, fig.height=9, out.width="100%"}
+# Define Forbes blue
+forbes_blue <- "#4E5BA6"
+
+
+p <- ggplot(forbs_data, aes(x = percentage, y = `Pet peeve`)) +
   
   # Bars
-  geom_col(fill = "#4B5AA7", width = 0.65) +
+  geom_col(fill = forbes_blue, width = 0.75) +
   
-  # Percent labels inside bars
+  # Percent labels
   geom_text(aes(label = percent(percentage, accuracy = 0.1)),
-            hjust = 1.05,
+            hjust = 1.1,
             color = "white",
             size = 4,
             fontface = "bold") +
   
-  # Remove x-axis scale appearance
+  # Add breathing space
   scale_x_continuous(
-    limits = c(0, max(forbs_data$percentage) * 1.05),
-    expand = c(0, 0)
+    expand = expansion(mult = c(0.02, 0.15))
   ) +
   
   # Titles
@@ -77,19 +80,48 @@ ggplot(forbs_data, aes(x = percentage, y = `Pet peeve`)) +
   ) +
   
   # Theme styling
-  theme_minimal(base_size = 13) +
+  theme_minimal(base_size = 14) +
   theme(
-    plot.background = element_rect(fill = "#f2f2f2", color = NA),
-    panel.background = element_rect(fill = "#f2f2f2", color = NA),
+    plot.background = element_rect(fill = "#F3F4F6", color = NA),
+    panel.background = element_rect(fill = "#F3F4F6", color = NA),
     
-    plot.title = element_text(face = "bold", size = 20, color = "#2c3e50"),
-    plot.subtitle = element_text(size = 12, color = "#555555"),
+    plot.title.position = "plot",
+    plot.title = element_text(
+      face = "bold",
+      size = 26,
+      color = forbes_blue,
+      hjust = 0
+    ),
+    plot.subtitle = element_text(
+      size = 18,
+      color = "#6B7785",
+      hjust = 0,
+      margin = margin(b = 20)
+    ),
     
+    axis.text.y = element_text(size = 18, color = "#3C4858"),
     axis.text.x = element_blank(),
     axis.ticks = element_blank(),
+    
     panel.grid.major.x = element_blank(),
     panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_line(
+      color = "#DADDE2",
+      linewidth = 0.5,
+      linetype = "dotted"
+    ),
     
-    panel.grid.major.y = element_line(color = "#d9d9d9", size = 0.3)
+    plot.margin = margin(t = 40, r = 40, b = 40, l = 40)
   )
+
+# Making the blue headed bar
+top_bar <- ggplot() +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = forbes_blue, color = NA)
+  )
+
+#Combining the head bar and plot
+(top_bar / p) +
+  plot_layout(heights = c(0.04, 1))
 ```
