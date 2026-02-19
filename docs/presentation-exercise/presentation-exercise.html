@@ -479,32 +479,40 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 <span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">data_row.padding =</span> <span class="fu">px</span>(<span class="dv">10</span>)</span>
 <span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Generating interactive footnotes:</span></span>
-<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
-<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="fu">md</span>(</span>
-<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>      <span class="st">"*Source:* [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"</span></span>
-<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>state_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Automatic conditional formatting</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#DCE3F5"</span>),</span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> pet_peeve_1,</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> pet_peeve_1 <span class="sc">==</span> <span class="st">"Finding a dog sitter"</span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="fu">md</span>(</span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>      <span class="st">"*Source:* [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>state_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="djwwmyjkfx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#djwwmyjkfx table {
+<div id="fofgncmmub" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fofgncmmub table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#djwwmyjkfx thead, #djwwmyjkfx tbody, #djwwmyjkfx tfoot, #djwwmyjkfx tr, #djwwmyjkfx td, #djwwmyjkfx th {
+#fofgncmmub thead, #fofgncmmub tbody, #fofgncmmub tfoot, #fofgncmmub tr, #fofgncmmub td, #fofgncmmub th {
   border-style: none;
 }
 
-#djwwmyjkfx p {
+#fofgncmmub p {
   margin: 0;
   padding: 0;
 }
 
-#djwwmyjkfx .gt_table {
+#fofgncmmub .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -530,12 +538,12 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-left-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_caption {
+#fofgncmmub .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#djwwmyjkfx .gt_title {
+#fofgncmmub .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -547,7 +555,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-bottom-width: 0;
 }
 
-#djwwmyjkfx .gt_subtitle {
+#fofgncmmub .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -559,7 +567,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-top-width: 0;
 }
 
-#djwwmyjkfx .gt_heading {
+#fofgncmmub .gt_heading {
   background-color: #F3F4F6;
   text-align: center;
   border-bottom-color: #F3F4F6;
@@ -571,13 +579,13 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-right-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_bottom_border {
+#fofgncmmub .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_col_headings {
+#fofgncmmub .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -592,7 +600,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-right-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_col_heading {
+#fofgncmmub .gt_col_heading {
   color: #333333;
   background-color: #F3F4F6;
   font-size: 100%;
@@ -612,7 +620,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   overflow-x: hidden;
 }
 
-#djwwmyjkfx .gt_column_spanner_outer {
+#fofgncmmub .gt_column_spanner_outer {
   color: #333333;
   background-color: #F3F4F6;
   font-size: 100%;
@@ -624,15 +632,15 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 4px;
 }
 
-#djwwmyjkfx .gt_column_spanner_outer:first-child {
+#fofgncmmub .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#djwwmyjkfx .gt_column_spanner_outer:last-child {
+#fofgncmmub .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#djwwmyjkfx .gt_column_spanner {
+#fofgncmmub .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -644,11 +652,11 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   width: 100%;
 }
 
-#djwwmyjkfx .gt_spanner_row {
+#fofgncmmub .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#djwwmyjkfx .gt_group_heading {
+#fofgncmmub .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -674,7 +682,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   text-align: left;
 }
 
-#djwwmyjkfx .gt_empty_group_heading {
+#fofgncmmub .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #F3F4F6;
@@ -689,15 +697,15 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   vertical-align: middle;
 }
 
-#djwwmyjkfx .gt_from_md > :first-child {
+#fofgncmmub .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#djwwmyjkfx .gt_from_md > :last-child {
+#fofgncmmub .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#djwwmyjkfx .gt_row {
+#fofgncmmub .gt_row {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 5px;
@@ -716,7 +724,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   overflow-x: hidden;
 }
 
-#djwwmyjkfx .gt_stub {
+#fofgncmmub .gt_stub {
   color: #333333;
   background-color: #F3F4F6;
   font-size: 100%;
@@ -729,7 +737,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 5px;
 }
 
-#djwwmyjkfx .gt_stub_row_group {
+#fofgncmmub .gt_stub_row_group {
   color: #333333;
   background-color: #F3F4F6;
   font-size: 100%;
@@ -743,15 +751,15 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   vertical-align: top;
 }
 
-#djwwmyjkfx .gt_row_group_first td {
+#fofgncmmub .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#djwwmyjkfx .gt_row_group_first th {
+#fofgncmmub .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#djwwmyjkfx .gt_summary_row {
+#fofgncmmub .gt_summary_row {
   color: #333333;
   background-color: #F3F4F6;
   text-transform: inherit;
@@ -761,16 +769,16 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 5px;
 }
 
-#djwwmyjkfx .gt_first_summary_row {
+#fofgncmmub .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_first_summary_row.thick {
+#fofgncmmub .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#djwwmyjkfx .gt_last_summary_row {
+#fofgncmmub .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -780,7 +788,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-bottom-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_grand_summary_row {
+#fofgncmmub .gt_grand_summary_row {
   color: #333333;
   background-color: #F3F4F6;
   text-transform: inherit;
@@ -790,7 +798,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 5px;
 }
 
-#djwwmyjkfx .gt_first_grand_summary_row {
+#fofgncmmub .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -800,7 +808,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-top-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_last_grand_summary_row_top {
+#fofgncmmub .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -810,11 +818,11 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-bottom-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_striped {
+#fofgncmmub .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#djwwmyjkfx .gt_table_body {
+#fofgncmmub .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -823,7 +831,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-bottom-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_footnotes {
+#fofgncmmub .gt_footnotes {
   color: #333333;
   background-color: #F3F4F6;
   border-bottom-style: none;
@@ -837,7 +845,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-right-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_footnote {
+#fofgncmmub .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -846,7 +854,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 5px;
 }
 
-#djwwmyjkfx .gt_sourcenotes {
+#fofgncmmub .gt_sourcenotes {
   color: #333333;
   background-color: #F3F4F6;
   border-bottom-style: none;
@@ -860,7 +868,7 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   border-right-color: #D3D3D3;
 }
 
-#djwwmyjkfx .gt_sourcenote {
+#fofgncmmub .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -868,72 +876,72 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
   padding-right: 5px;
 }
 
-#djwwmyjkfx .gt_left {
+#fofgncmmub .gt_left {
   text-align: left;
 }
 
-#djwwmyjkfx .gt_center {
+#fofgncmmub .gt_center {
   text-align: center;
 }
 
-#djwwmyjkfx .gt_right {
+#fofgncmmub .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#djwwmyjkfx .gt_font_normal {
+#fofgncmmub .gt_font_normal {
   font-weight: normal;
 }
 
-#djwwmyjkfx .gt_font_bold {
+#fofgncmmub .gt_font_bold {
   font-weight: bold;
 }
 
-#djwwmyjkfx .gt_font_italic {
+#fofgncmmub .gt_font_italic {
   font-style: italic;
 }
 
-#djwwmyjkfx .gt_super {
+#fofgncmmub .gt_super {
   font-size: 65%;
 }
 
-#djwwmyjkfx .gt_footnote_marks {
+#fofgncmmub .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#djwwmyjkfx .gt_asterisk {
+#fofgncmmub .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#djwwmyjkfx .gt_indent_1 {
+#fofgncmmub .gt_indent_1 {
   text-indent: 5px;
 }
 
-#djwwmyjkfx .gt_indent_2 {
+#fofgncmmub .gt_indent_2 {
   text-indent: 10px;
 }
 
-#djwwmyjkfx .gt_indent_3 {
+#fofgncmmub .gt_indent_3 {
   text-indent: 15px;
 }
 
-#djwwmyjkfx .gt_indent_4 {
+#fofgncmmub .gt_indent_4 {
   text-indent: 20px;
 }
 
-#djwwmyjkfx .gt_indent_5 {
+#fofgncmmub .gt_indent_5 {
   text-indent: 25px;
 }
 
-#djwwmyjkfx .katex-display {
+#fofgncmmub .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#djwwmyjkfx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#fofgncmmub div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -956,25 +964,25 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Alabama</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Alaska</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Arizona</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Arkansas</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
@@ -986,13 +994,13 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Colorado</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Connecticut</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
@@ -1016,127 +1024,127 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Hawaii</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Idaho</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Illinois</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Indiana</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Picking up my dog's waste</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Iowa</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Kansas</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Walking/exercising my dog</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Kentucky</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Louisiana</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Maine</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels/Cost of owning a dog</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Maryland</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Massachusetts</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Walking/exercising my dog</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Michigan</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Picking up my dog's waste</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Minnesota</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Mississippi</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog/Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Missouri</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive shedding</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Montana</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Picking up my dog's waste</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Nebraska</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Nevada</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog/Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">New Hampshire</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">New Jersey</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">New Mexico</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
@@ -1148,31 +1156,31 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">North Carolina</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">North Dakota</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive shedding</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Ohio</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive shedding</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Oklahoma</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Oregon</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Picking up my dog's waste</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
 </tr>
@@ -1184,49 +1192,49 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Rhode Island</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">South Carolina</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">South Dakota</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Tennessee</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive shedding</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Texas</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Utah</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Vermont</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog/Excessive shedding</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Virginia</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
@@ -1238,19 +1246,19 @@ chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">West Virginia</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="state">Wisconsin</td>
-<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
 <td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left gt_striped" headers="state">Wyoming</td>
-<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1" style="background-color: #DCE3F5">Finding a dog sitter</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
 <td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
 </tr>
