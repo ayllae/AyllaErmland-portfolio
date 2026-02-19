@@ -1,298 +1,91 @@
 ---
-title: "Data Analysis Exercise: Exploring flu vaccination coverage in U.S. adults (2020–21)"
+title: "Presentation exercise: The biggest pet peeves of dog owners nationwide and in each state (by Forbes)"
 ---
 
-This dataset comes from the CDC’s Cumulative Influenza Vaccination Coverage for Adults 18 years and older in the United States during the 2020-21 flu season. 
- 
- You can find the original CDC dataset [here](https://data.cdc.gov/Vaccinations/Cumulative-Influenza-Vaccination-Coverage-Adults-1/kmap-fsfn/about_data). 
+For this exercise I will recreate the graph from Forbes website available here:
 
- The surveys were done using two large national panels: the IPSOS KnowledgePanel Omnibus and the NORC AmeriSpeak Omnibus.Each row in the dataset gives us information like when the data was collected, what age or race/ethnicity group it refers to, what percent of adults said they had gotten a flu shot (the point estimate), and the confidence interval (range of uncertainty). It also shows the sample size corresponding to how many people responded that week in that group.
+[The biggest pet peeves of dog owners nationwide and in each state](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)
 
- Load and process data: 
+![](Picture1.png)
 
-Besides trimming the dataset to keep only the relevant columns, I also had to fix two issues. First, the Data_Collection_Midpoint_date column included unnecessary time information. Since all records for a given period already shared the same time, I formatted this column to display only the year and month (“2021 Jan”). Second, the Sample_Size column had a value labeled as "<30", which made the variable non-numeric and broke summary calculations. To fix this, I converted all "<30" values to "30" so the column could be treated as a continuous numeric variable.
+
+For breaking the ice, this is one of mine:
+![](Pic2.jpg){width=40%}
+
+To reproduce this graph first we will import its data file: Top_Pet_Peeves_Of_Dog_Owners_Nationwide.csv
 
 ```{r}
 library(tidyverse)
-library(readr)
-library(lubridate)
-library(here)
+library(scales)
+```
 
-#Load the data
-flu_data <- read_csv(here("cdcdata-exercise", "Cumulative_Influenza_Vaccination_Coverage_20260210.csv"))
+```{r}
+#Read csv file
+forbs_data <- read_csv("presentation-exercise/Top_Pet_Peeves_Of_Dog_Owners_Nationwide.csv")
 
-#Show all column names (optional)
-colnames(flu_data)
-
-#Select and clean columns
-flu_trimmed <- flu_data %>%
-  select(
-    Data_Collection_Midpoint_date,
-    Race_Ethnicity,
-    Age_Group,
-    Point_Estimate,
-    CI_Lower,
-    CI_Upper,
-    Sample_Size
-  ) %>%
+#Clean percentage column
+forbs_data <- forbs_data %>%
   mutate(
-    #Format the date: "2020 Dec 19 12:00:00 AM" → "2020 Dec"
-    Data_Collection_Midpoint_date = format(
-      parse_date_time(Data_Collection_Midpoint_date, orders = "Y b d I:M:S p"),
-      "%Y %b"
-    ),
+    percentage = parse_number(`Percentage of respondents`) / 100
+  )
+
+colnames(forbs_data)
+```
+
+
+```{r}
+#Order rows that shows in the graph:
+
+forbs_data <- forbs_data %>%
+  mutate(
+    `Pet peeve` = forcats::fct_reorder(`Pet peeve`, percentage)
+  )
+
+```
+
+
+```{r}
+#Create the plot:
+ggplot(forbs_data, aes(x = percentage, y = `Pet peeve`)) +
+  
+  # Bars
+  geom_col(fill = "#4B5AA7", width = 0.65) +
+  
+  # Percent labels inside bars
+  geom_text(aes(label = percent(percentage, accuracy = 0.1)),
+            hjust = 1.05,
+            color = "white",
+            size = 4,
+            fontface = "bold") +
+  
+  # Remove x-axis scale appearance
+  scale_x_continuous(
+    limits = c(0, max(forbs_data$percentage) * 1.05),
+    expand = c(0, 0)
+  ) +
+  
+  # Titles
+  labs(
+    title = "Top Pet Peeves Of Dog Owners Nationwide",
+    subtitle = "Data comes from a Forbes Advisor survey of 10,000 dog owners.",
+    x = NULL,
+    y = NULL
+  ) +
+  
+  # Theme styling
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.background = element_rect(fill = "#f2f2f2", color = NA),
+    panel.background = element_rect(fill = "#f2f2f2", color = NA),
     
-    #Clean Sample_Size: remove "<" if present, then convert to numeric
-    Sample_Size = as.numeric(gsub("<", "", Sample_Size))
-  )
-
-#Save processed dataset
-write_csv(flu_trimmed, here("cdcdata-exercise", "flu_trimmed_dataset.csv"))
-```
-
-Exploring the data:
-
-1st variable: 
-Estimating frequencies of Age_Group variable: 
-
-```{r}
-#Creating a summary table for Age_Group:
-#This counts how many rows belong to each unique age group
-age_summary <- flu_trimmed %>%
-  group_by(Age_Group) %>%          #Group the data by Age_Group
-  summarise(
-    count = n()                    #Count how many rows in each group
-  ) %>%
-  mutate(
-    percent = round(100 * count / sum(count), 1)  #Calculate the percentage each group represents (rounded to 1 decimal)
-  )
-
-#Print the summary table
-age_summary
-
-#Bar plot showing the percentage for each age group
-ggplot(age_summary, aes(x = reorder(Age_Group, -percent), y = percent)) +  
-  geom_col(fill = "lightblue") +  
-  labs(
-    title = "Distribution of Records by Age Group",  
-    x = "Age Group",                                 
-    y = "Percentage (%)"                            
-  )
-
-```
-
-Estimating frequencies for the 2nd variable race_ethnicity:
-
-```{r}
-#Creating a summary table for Race_Ethnicity:
-#calculates how many records fall under each racial/ethnic group and what % that is
-
-race_summary <- flu_trimmed %>%
-  group_by(Race_Ethnicity) %>%     
-  summarise(
-    count = n()                    #Count the number of records (rows) in each group
-  ) %>%
-  mutate(
-    percent = round(100 * count / sum(count), 1)  #Calculate what % of the total each group represents
-  )
-
-race_summary
-
-#Bar chart of the percentage of records by Race_Ethnicity
-ggplot(race_summary, aes(x = reorder(Race_Ethnicity, -percent), y = percent)) +
-  geom_col(fill = "lightpink") +  #Use a bar chart (column plot) with coral color
-  labs(
-    title = "Distribution of records by race/ethnicity",  
-    x = "Race/ethnicity",                                 
-    y = "Percentage (%)"                                  
-  ) +
-  coord_flip()  #Flip coordinates so bars are horizontal
-```
-
-3rd Variable: 
-
-For the continuous variable of vaccination coverage, I will plot a distribution and calculate the mean and SD of this dataset.
-
-```{r}
-
-# Summary statistics
-coverage_stats <- flu_trimmed %>%
-  summarise(
-    mean_coverage = mean(Point_Estimate, na.rm = TRUE),
-    sd_coverage = sd(Point_Estimate, na.rm = TRUE)
-  )
-
-coverage_stats
-
-# Histogram with normal curve (updated syntax)
-ggplot(flu_trimmed, aes(x = Point_Estimate)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "black", color = "black", na.rm = TRUE) +
-  #Add a normal distribution curve using the mean and SD from the data:
-  stat_function(
-    fun = dnorm,
-    args = list(
-      mean = mean(flu_trimmed$Point_Estimate, na.rm = TRUE),
-      sd = sd(flu_trimmed$Point_Estimate, na.rm = TRUE)
-    ),
-    color = "red"
-  ) +
-  labs(
-    title = "Vaccination coverage",
-    x = "Coverage (%)",
-    y = "Density"
+    plot.title = element_text(face = "bold", size = 20, color = "#2c3e50"),
+    plot.subtitle = element_text(size = 12, color = "#555555"),
+    
+    axis.text.x = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    
+    panel.grid.major.y = element_line(color = "#d9d9d9", size = 0.3)
   )
 ```
-
-
-4th variable: Data_Collection_Midpoint_date
-
- ```{r}
-# Calculate percentage of records per month
-date_counts <- flu_trimmed %>%
-  group_by(Data_Collection_Midpoint_date) %>%
-  summarise(records = n()) %>%
-  mutate(percent = round(100 * records / sum(records), 1))
-
-head(date_counts)  # Preview table
-
-# Bar plot showing percentage of records per month
-ggplot(date_counts, aes(x = Data_Collection_Midpoint_date, y = percent)) +
-  geom_col(fill = "black") +
-  labs(
-    title = "Percentage of records by month and year",
-    x = "Month/Year",
-    y = "Percentage (%)"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
- ```
-
-5th variable: Sample size
-
-```{r}
-#Calculate mean and standard deviation for Sample_Size
-sample_size_stats <- flu_trimmed %>%
-  summarise(
-    mean_sample_size = mean(Sample_Size, na.rm = TRUE),
-    sd_sample_size = sd(Sample_Size, na.rm = TRUE)
-  )
-
-sample_size_stats
-
-# Histogram to check distribution
-ggplot(flu_trimmed, aes(x = Sample_Size)) +
-  geom_histogram(bins = 25, fill = "black", color = "white") +
-  labs(
-    title = "Distribution of Sample Size",
-    x = "Sample Size",
-    y = "Count"
-  )
-
-```
-
-**This section is contributed by: Emil Joson**
-
-I'm recreating the cleaned dataset (flu_trimmed) using synthetic data (at least enough to recreate the figures above). Specifically, I'm aiming for a dataset with 5 columns and 140 rows. The 5 columns are:
-  1. collection_date (Dec 2020, Jan 2021, Feb 2021)
-  2. race (Black, Non-Hispanic; White, Non-Hispanic; Other, Non-Hispanic; Hispanic; Overall; [equal distribution])
-  3. age_group (18-49; 50-64; 65+; All Adults (18+); [equal distribution])
-  4. coverage (1-100%; [normal distribution])
-  5. sample_size (1-1000; [left-skewed]) 
-
-_Disclaimer: Code for synthesizing data in R was aided with chatGPT with the description above._
-
-```{r}
-
-library(ggplot2) 
-
-#Preparing variables: dates, races, age_groups
-
-dates <- as.POSIXct(c("2020-12-15 12:00:00", "2021-01-15 12:00:00", "2021-02-15 12:00:00"), tz = "America/New_York")
-
-races <- c("White, non-Hispanic", "Hispanic", "Black, non-Hispanic", "Other, non-Hispanic", "Overall")
-
-age_groups <- c("18–49", "50–64", "65+", "All adults (18+)")
-```
-
-
-```{r}
-#Preparing the dataframe
-base_grid <- expand.grid(race = races, age_group = age_groups, stringsAsFactors = FALSE)
-
-synthetic <- base_grid[rep(seq_len(nrow(base_grid)), times = 7), ]
-
-nrow(synthetic) #confirming 140 rows
-```
-
-At this point, the dataframe now has both races and age groups. Because of how they're made, we've made sure that they're equally distributed - just like in the cleaned dataset above.
-
-```{r}
-E1 <- ggplot(synthetic, aes(x = race))+
-  geom_bar()+
-  theme(axis.text.x = element_text(angle=90))
-
-E2 <- ggplot(synthetic, aes(x = age_group))+
-  geom_bar()+
-  theme(axis.text.x = element_text(angle=90))
-
-library(gridExtra)
-grid.arrange(E1, E2, ncol = 2, nrow =1)
-```
-
-Continuing with adding more variables to the dataframe, here I'm adding dates. I only specified three entries (Dec 2020, Jan 2021, Feb 2021) but I didn't specify the distribution. I just wanted to see what the AI would default to.
-
-```{r}
-#Adding collection dates to the dataframe
-n <- 140
-date_vec <- rep(dates, length.out = n)
-date_vec <- sample(date_vec)  # shuffle so dates aren’t in blocks
-synthetic$data_collection_date <- date_vec
-
-ggplot(synthetic, aes(x = data_collection_date))+
-  geom_bar()
-```
-
-The dates here are more equally distributed than the cleaned dataset above. 
-
-Next, the sample sizes. In order to recreate the distribution shape of the cleaned dataset above, I specified the prompt to produce a left-skewed distribution.
-
-```{r}
-#Adding sample sizes to the data frame
-raw_n <- rexp(n, rate = 1/120)      # exponential; mean ~120 (lots of small values)
-sample_size <- pmin(pmax(round(raw_n), 1), 1000)
-
-synthetic$sample_size <- sample_size
-
-ggplot(synthetic, aes(x = sample_size))+
-  geom_histogram()
-```
-
-The synthetic data produced here does lean toward the left. However, I think the cleaned dataset above was way more skewed. 
-
-Lastly, vaccination coverage. I specfified the prompt that this variable should exhibit a normal distribution just like the cleaned dataset above.
-
-```{r}
-#Adding vaccination coverage to the dataframe
-coverage <- rnorm(n, mean = 55, sd = 12)
-coverage <- pmin(pmax(coverage, 0), 100)
-synthetic$coverage <- coverage
-
-#Grabbing the code from above to produce the figure
-ggplot(synthetic, aes(x = coverage)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "black", color = "black", na.rm = TRUE) +
-  #Add a normal distribution curve using the mean and SD from the data:
-  stat_function(
-    fun = dnorm,
-    args = list(
-      mean = mean(synthetic$coverage),
-      sd = sd(synthetic$coverage)
-    ),
-    color = "red"
-  ) +
-  labs(
-    title = "Vaccination coverage",
-    x = "Coverage (%)",
-    y = "Density"
-  )
-```
-
