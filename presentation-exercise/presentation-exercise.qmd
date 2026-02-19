@@ -161,9 +161,8 @@ state_data <- state_data %>%
   )
 ```
 
-```{r}
 
-# clean the csv file labels
+```{r}
 colnames(state_data) <- c(
   "state",
   "pet_peeve_1",
@@ -173,11 +172,9 @@ colnames(state_data) <- c(
 
 forbes_blue <- "#4E5BA6"
 
-# Create table
 state_table <- state_data %>%
   gt() %>%
   
-  # Column labels
   cols_label(
     state = "State",
     pet_peeve_1 = "Pet Peeve #1",
@@ -185,13 +182,11 @@ state_table <- state_data %>%
     pet_peeve_3 = "Pet Peeve #3"
   ) %>%
   
-  # Title + Subtitle
   tab_header(
     title = md("**Top Pet Peeves Of Dog Owners In Each State**"),
     subtitle = "Data comes from a Forbes Advisor survey of 10,000 dog owners (200 in each state)."
   ) %>%
   
-  # Style title
   tab_style(
     style = cell_text(
       color = forbes_blue,
@@ -201,7 +196,6 @@ state_table <- state_data %>%
     locations = cells_title(groups = "title")
   ) %>%
   
-  # Header styling
   tab_style(
     style = list(
       cell_text(weight = "bold"),
@@ -210,10 +204,8 @@ state_table <- state_data %>%
     locations = cells_column_labels(everything())
   ) %>%
   
-  # Alternating row shading
   opt_row_striping() %>%
   
-  # Top blue strip effect
   tab_options(
     table.border.top.color = forbes_blue,
     table.border.top.width = px(8),
@@ -222,13 +214,14 @@ state_table <- state_data %>%
     data_row.padding = px(10)
   ) %>%
   
-  # Footer
+  #Generating interactive footnotes:
   tab_source_note(
-    source_note = "Source: [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"
+    source_note = md(
+      "*Source:* [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"
+    )
   )
 
 state_table
-
 ```
 
 **Some of the prompts used for this exercise:**
