@@ -17,11 +17,15 @@ To reproduce this graph first we will import its data file: Top_Pet_Peeves_Of_Do
 ```{r}
 library(tidyverse)
 library(scales)
+library(here)
 ```
 
 ```{r}
 #Read csv file
-forbs_data <- read_csv("presentation-exercise/Top_Pet_Peeves_Of_Dog_Owners_Nationwide.csv")
+forbs_data <- read_csv(
+  here("presentation-exercise",
+       "Top_Pet_Peeves_Of_Dog_Owners_Nationwide.csv")
+)
 
 #Clean percentage column
 forbs_data <- forbs_data %>%
