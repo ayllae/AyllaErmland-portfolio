@@ -201,10 +201,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p><strong>Part I: Recreating graph”</strong></p>
 <p>For this exercise I will recreate the graph from Forbes website available here:</p>
 <p><a href="https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/">The biggest pet peeves of dog owners nationwide and in each state</a></p>
 <p><img src="Picture1.png" class="img-fluid"></p>
-<p>For breaking the ice, this is one of mine: <img src="Pic2.jpg" class="img-fluid" style="width:40.0%"></p>
+<p>For breaking the ice, here is one of mine: <img src="Pic2.jpg" class="img-fluid" style="width:40.0%"></p>
 <p>To reproduce this graph first we will import its data file: Top_Pet_Peeves_Of_Dog_Owners_Nationwide.csv</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -290,28 +291,28 @@ chr (2): Pet peeve, Percentage of respondents
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Forbes blue</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define Forbes blue</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>forbes_blue <span class="ot">&lt;-</span> <span class="st">"#4E5BA6"</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(forbs_data, <span class="fu">aes</span>(<span class="at">x =</span> percentage, <span class="at">y =</span> <span class="st">`</span><span class="at">Pet peeve</span><span class="st">`</span>)) <span class="sc">+</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bars</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Bars</span></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> forbes_blue, <span class="at">width =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Percent labels</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Percent labels</span></span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">percent</span>(percentage, <span class="at">accuracy =</span> <span class="fl">0.1</span>)),</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="fl">1.1</span>,</span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"white"</span>,</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">4</span>,</span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add breathing space</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Add breathing space</span></span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.15</span>))</span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Titles</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Titles</span></span>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Top Pet Peeves Of Dog Owners Nationwide"</span>,</span>
 <span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data comes from a Forbes Advisor survey of 10,000 dog owners."</span>,</span>
@@ -319,7 +320,7 @@ chr (2): Pet peeve, Percentage of respondents
 <span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Theme styling</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Theme styling</span></span>
 <span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
 <span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#F3F4F6"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
@@ -354,7 +355,7 @@ chr (2): Pet peeve, Percentage of respondents
 <span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">40</span>, <span class="at">r =</span> <span class="dv">40</span>, <span class="at">b =</span> <span class="dv">40</span>, <span class="at">l =</span> <span class="dv">40</span>)</span>
 <span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Making the blue headed bar</span></span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a><span class="co">#Making the blue headed bar</span></span>
 <span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>top_bar <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
 <span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
@@ -372,6 +373,907 @@ chr (2): Pet peeve, Percentage of respondents
 </div>
 </div>
 </div>
+<p><strong>Part II: Recreating Table</strong></p>
+<p>The table I will recreate is in the same website and represents the top pet peeves of dog owners in each state:</p>
+<p><img src="Table1.png" class="img-fluid"></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'gt' was built under R version 4.4.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"presentation-exercise"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">"Top_pet_peeves_of_dog_owners_in_each_state.csv"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 50 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(state_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "State"              "~~~Pet Peeve #1~~~" "~~~Pet Peeve #2~~~"
+[4] "~~~Pet Peeve #3~~~"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"presentation-exercise"</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">"Top_pet_peeves_of_dog_owners_in_each_state.csv"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 50 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): State, ~~~Pet Peeve #1~~~, ~~~Pet Peeve #2~~~, ~~~Pet Peeve #3~~~
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(state_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "State"              "~~~Pet Peeve #1~~~" "~~~Pet Peeve #2~~~"
+[4] "~~~Pet Peeve #3~~~"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="ot">&lt;-</span> state_data <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">state =</span> State,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_1 =</span> <span class="st">`</span><span class="at">~~~Pet Peeve #1~~~</span><span class="st">`</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_2 =</span> <span class="st">`</span><span class="at">~~~Pet Peeve #2~~~</span><span class="st">`</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_3 =</span> <span class="st">`</span><span class="at">~~~Pet Peeve #3~~~</span><span class="st">`</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clean the csv file labels</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(state_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"state"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"pet_peeve_1"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"pet_peeve_2"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"pet_peeve_3"</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>forbes_blue <span class="ot">&lt;-</span> <span class="st">"#4E5BA6"</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create table</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>state_table <span class="ot">&lt;-</span> state_data <span class="sc">%&gt;%</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Column labels</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">state =</span> <span class="st">"State"</span>,</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_1 =</span> <span class="st">"Pet Peeve #1"</span>,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_2 =</span> <span class="st">"Pet Peeve #2"</span>,</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">pet_peeve_3 =</span> <span class="st">"Pet Peeve #3"</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Title + Subtitle</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Top Pet Peeves Of Dog Owners In Each State**"</span>),</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data comes from a Forbes Advisor survey of 10,000 dog owners (200 in each state)."</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Style title</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_text</span>(</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> forbes_blue,</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">weight =</span> <span class="st">"bold"</span>,</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="st">"x-large"</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>(<span class="at">groups =</span> <span class="st">"title"</span>)</span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Header styling</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>),</span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#F3F4F6"</span>)</span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="fu">everything</span>())</span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Alternating row shading</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_row_striping</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Top blue strip effect</span></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.border.top.color =</span> forbes_blue,</span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.border.top.width =</span> <span class="fu">px</span>(<span class="dv">8</span>),</span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.background.color =</span> <span class="st">"#F3F4F6"</span>,</span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">heading.background.color =</span> <span class="st">"#F3F4F6"</span>,</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">data_row.padding =</span> <span class="fu">px</span>(<span class="dv">10</span>)</span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Footer</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="st">"Source: [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)"</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>state_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="haaiwxntps" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#haaiwxntps table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#haaiwxntps thead, #haaiwxntps tbody, #haaiwxntps tfoot, #haaiwxntps tr, #haaiwxntps td, #haaiwxntps th {
+  border-style: none;
+}
+
+#haaiwxntps p {
+  margin: 0;
+  padding: 0;
+}
+
+#haaiwxntps .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #F3F4F6;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 8px;
+  border-top-color: #4E5BA6;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#haaiwxntps .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #F3F4F6;
+  border-bottom-width: 0;
+}
+
+#haaiwxntps .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #F3F4F6;
+  border-top-width: 0;
+}
+
+#haaiwxntps .gt_heading {
+  background-color: #F3F4F6;
+  text-align: center;
+  border-bottom-color: #F3F4F6;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_col_heading {
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#haaiwxntps .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#haaiwxntps .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#haaiwxntps .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#haaiwxntps .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#haaiwxntps .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#haaiwxntps .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#haaiwxntps .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#haaiwxntps .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#haaiwxntps .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#haaiwxntps .gt_row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#haaiwxntps .gt_stub {
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaiwxntps .gt_stub_row_group {
+  color: #333333;
+  background-color: #F3F4F6;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#haaiwxntps .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#haaiwxntps .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#haaiwxntps .gt_summary_row {
+  color: #333333;
+  background-color: #F3F4F6;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaiwxntps .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#haaiwxntps .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_grand_summary_row {
+  color: #333333;
+  background-color: #F3F4F6;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaiwxntps .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#haaiwxntps .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_footnotes {
+  color: #333333;
+  background-color: #F3F4F6;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaiwxntps .gt_sourcenotes {
+  color: #333333;
+  background-color: #F3F4F6;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#haaiwxntps .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaiwxntps .gt_left {
+  text-align: left;
+}
+
+#haaiwxntps .gt_center {
+  text-align: center;
+}
+
+#haaiwxntps .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#haaiwxntps .gt_font_normal {
+  font-weight: normal;
+}
+
+#haaiwxntps .gt_font_bold {
+  font-weight: bold;
+}
+
+#haaiwxntps .gt_font_italic {
+  font-style: italic;
+}
+
+#haaiwxntps .gt_super {
+  font-size: 65%;
+}
+
+#haaiwxntps .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#haaiwxntps .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#haaiwxntps .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#haaiwxntps .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#haaiwxntps .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#haaiwxntps .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#haaiwxntps .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#haaiwxntps .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#haaiwxntps div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal" style="color: #4E5BA6; font-size: x-large; font-weight: bold"><strong>Top Pet Peeves Of Dog Owners In Each State</strong></td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Data comes from a Forbes Advisor survey of 10,000 dog owners (200 in each state).</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="state" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; background-color: #F3F4F6" scope="col">State</th>
+<th id="pet_peeve_1" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; background-color: #F3F4F6" scope="col">Pet Peeve #1</th>
+<th id="pet_peeve_2" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; background-color: #F3F4F6" scope="col">Pet Peeve #2</th>
+<th id="pet_peeve_3" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; background-color: #F3F4F6" scope="col">Pet Peeve #3</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Alabama</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Alaska</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Arizona</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Arkansas</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">California</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Colorado</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Connecticut</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Delaware</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Florida</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding a dog sitter</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Georgia</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding a dog sitter</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Hawaii</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Idaho</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Illinois</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Indiana</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Picking up my dog's waste</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Iowa</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Kansas</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Kentucky</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Louisiana</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Maine</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels/Cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Maryland</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Walking/exercising my dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Massachusetts</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Walking/exercising my dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Michigan</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Picking up my dog's waste</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Minnesota</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Mississippi</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog/Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Missouri</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive shedding</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Montana</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Picking up my dog's waste</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Nebraska</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Nevada</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog/Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">New Hampshire</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">New Jersey</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">New Mexico</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">New York</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">North Carolina</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">North Dakota</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive shedding</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Ohio</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive shedding</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Oklahoma</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Oregon</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Picking up my dog's waste</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Pennsylvania</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Rhode Island</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">South Carolina</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">South Dakota</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive shedding</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Tennessee</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive shedding</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Texas</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Utah</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Finding dog-friendly hotels</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Vermont</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">The cost of owning a dog/Excessive shedding</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Virginia</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Washington</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Walking/exercising my dog</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">West Virginia</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="state">Wisconsin</td>
+<td class="gt_row gt_left" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left" headers="pet_peeve_2">Excessive barking</td>
+<td class="gt_row gt_left" headers="pet_peeve_3">The cost of owning a dog</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="state">Wyoming</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_1">Finding a dog sitter</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_2">Finding dog-friendly hotels</td>
+<td class="gt_row gt_left gt_striped" headers="pet_peeve_3">Excessive barking</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="4" class="gt_sourcenote">Source: [Forbes Advisor 2023 Pet Insurance Survey](https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/)</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<p><strong>Some of the prompts used for this exercise:</strong></p>
+<p><em>Recreate the figure from this site https://www.forbes.com/advisor/insurance/pet-insurance-pet-peeves-by-state/ more specifically the Top Pet Peeves Of Dog Owners Nationwide, using the csv file already downloaded. csv formatting row example:</em> <em>Pet peeve; Percentage of respondents;</em> <em>Finding a dog sitter when I travel; 37.34%</em> <em>The graph needs to be generated using R and ggplot2, the graph have a top bar in blue and bold title in blue also.</em></p>
+<p><em>For creating interactive footnotes in the table: For the footnotesm I want “[TEXT]” clickable/interactive in the [LOCATION] linking to [URL]. How do I do that?</em></p>
 
 
 
