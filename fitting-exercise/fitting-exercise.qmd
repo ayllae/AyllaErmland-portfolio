@@ -1,0 +1,236 @@
+---
+title: "Data Exercise: Analysis of age, gender effects on night time sleep using a synthetic dataset"
+---
+
+In this exercise, I chose to work with a dataset that simulates human sleep behavior, focusing on the circadian rhythm, the natural sleep cycle over 24 hours. The dataset includes information from different types of people, organized by age group (like children, adults, elders, and newborns) and gender (female and male), including also sleeping disorder (Regular, or Insomniac).
+
+It records how much people sleep during what was defined by the nigh time hours (from 10 PM to 8 AM), and allows us to explore how age, gender, and whether someone is an insomniac or not affects the number of hours they sleep.
+
+First step was to generate a synthetic dataset.
+
+The code below simulates sleep patterns for different types of people. Each person was randomly assigned a group (“Normal” or “Insomniac”), a gender, and an age, which was then used to classify them into an age type (like “Child”, “Adult”, “Newborn”, or “Elder”). 
+
+The 24-hour day was split into 12 time bins, each 2 hours long (e.g., 00–02, 02–04, …, 22–24). For each person, the code calculated how much of their sleep happened in each bin, based on their bedtime and sleep duration.
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+set.seed(1)
+
+# Define simulation parameters
+n <- 100
+groups <- c("Regular", "Insomniac")
+bins <- seq(0, 24, by = 2)
+labels <- paste0(sprintf("%02d", bins), "-", sprintf("%02d", (bins + 2) %% 24))
+
+## AI Disclosure: this part below was created with the assistance of ChatGPT: 
+
+# Simulate individuals
+simulate_sleep <- function(group) {
+  # Randomly assign age type
+  age_type <- sample(c("Newborn", "Child", "Adult", "Elder"), 1, prob = c(0.1, 0.1, 0.7, 0.1))
+  age <- switch(age_type,
+                "Newborn" = round(runif(1, 0.1, 1.5), 2),
+                "Child" = round(runif(1, 3, 12), 1),
+                "Adult" = round(rnorm(1, 35, 10)),
+                "Elder" = round(rnorm(1, 70, 5)))
+
+  # Set sleep patterns based on Age_type so it can create a correlation. 
+  if (age_type == "Newborn") {
+    start <- rnorm(1, 20, 1)
+    dur <- rnorm(1, 10, 1)
+  } else if (age_type == "Child") {
+    start <- rnorm(1, 21, 0.5)
+    dur <- rnorm(1, 9, 0.7)
+  } else if (group == "Regular") {
+    start <- rnorm(1, 22.5, 0.5)
+    dur <- rnorm(1, 7.5, 0.5)
+  } else if (group == "Insomniac") {
+    start <- rnorm(1, 2.0, 1.5)
+    dur <- rnorm(1, 6, 1.5)
+  }
+
+  gender <- sample(c("Male", "Female"), 1)
+  start <- start %% 24
+  end <- (start + dur) %% 24
+
+  return(data.frame(start, end, duration = dur, group, age, gender, Age_type = age_type))
+}
+
+# Simulate all individuals
+sleep_df <- do.call(rbind, lapply(groups, function(g) {
+  do.call(rbind, replicate(n, simulate_sleep(g), simplify = FALSE))
+}))
+
+# Allocate sleep into time bins
+allocate_sleep <- function(start, end, duration) {
+  hour_vec <- numeric(length(bins))
+  for (i in seq_along(bins)) {
+    bin_start <- bins[i]
+    bin_end <- (bin_start + 2) %% 24
+    in_bin <- function(t) {
+      if (bin_start < bin_end) return(t >= bin_start & t < bin_end)
+      else return(t >= bin_start | t < bin_end)
+    }
+    bin_time <- seq(0, duration, by = 0.25) + start
+    bin_time <- bin_time %% 24
+    hour_vec[i] <- mean(in_bin(bin_time), na.rm = TRUE) * duration
+  }
+  return(hour_vec)
+}
+
+# Bin sleep data
+sleep_binned <- sleep_df %>%
+  rowwise() %>%
+  mutate(sleep_vec = list(allocate_sleep(start, end, duration))) %>%
+  ungroup()
+
+# Wide format for averaging
+sleep_matrix <- sleep_binned %>%
+  select(group, gender, age, Age_type, sleep_vec) %>%
+  unnest_wider(sleep_vec, names_sep = "_") %>%
+  rename_with(~labels, starts_with("sleep_vec"))
+
+# Create summary table: average sleep per 2-hour bin by Age_type
+sleep_summary <- sleep_matrix %>%
+  group_by(Age_type) %>%
+  summarise(across(all_of(labels), mean), .groups = "drop")
+
+```
+
+#Inspect how the data looks like: 
+
+```{r}
+str(sleep_matrix)
+summary(sleep_matrix)
+
+```
+
+Box Plot showing age of people that has insominia 
+
+```{r}
+ggplot(sleep_matrix, aes(x = group, y = age, fill = group)) +
+  geom_boxplot(color = "black", alpha = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Age Distribution by Group (Box Plot)",
+       x = "Group", y = "Age (years)") +
+  theme_minimal()
+```
+
+Box Plot of sleep time at night (from 22:00 to 08:00) and age_type (Adult, Child, Elder, Newborn):
+
+```{r}
+# Step 1: Define nighttime bins
+night_bins <- c("22-00", "00-02", "02-04", "04-06", "06-08")
+
+# Step 2: Calculate total nighttime sleep per person
+sleep_night <- sleep_matrix %>%
+  mutate(Night_sleep = rowSums(select(., all_of(night_bins)), na.rm = TRUE))
+
+# Step 3: Plot boxplot of nighttime sleep by Age_type
+ggplot(sleep_night, aes(x = Age_type, y = Night_sleep, fill = Age_type)) +
+  geom_boxplot(color = "black", alpha = 0.7) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(title = "Nighttime Sleep Duration (22:00–08:00) by Age Type",
+       x = "Age Type", y = "Total Sleep (hrs)") +
+  theme_minimal()
+```
+
+Circular plot of sleep time per category: 
+
+```{r}
+# Convert to long format for circular plot
+sleep_long <- sleep_summary %>%
+  pivot_longer(-Age_type, names_to = "time_bin", values_to = "sleep_amount") %>%
+  mutate(
+    bin_start = as.numeric(substr(time_bin, 1, 2)),
+    bin_label = paste0(bin_start, ":00"),
+    bin_angle = 2 * pi * bin_start / 24
+  )
+
+# Plot circular behavior by Age_type
+ggplot(sleep_long, aes(x = factor(bin_start), y = sleep_amount, fill = Age_type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 1, color = "black") +
+  coord_polar(start = pi/2) +
+  scale_x_discrete(
+    labels = function(x) paste0(x, ":00"),
+    breaks = as.character(bins)
+  ) +
+  labs(title = "Circular sleep behavior by age type",
+       x = "Time of Day", y = "Avg Hours Asleep (per 2h bin)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(),
+        panel.grid = element_blank(),
+        axis.title.y = element_text(margin = margin(r = 10)))
+
+```
+
+Check if the variables predict sleep time: 
+
+```{r}
+# Model 1: Predict nighttime sleep using Age_type
+fit1 <- lm(Night_sleep ~ Age_type, data = sleep_night)
+summary(fit1)
+
+lm(formula = Night_sleep ~ Age_type, data = sleep_night)
+```
+
+The model shows that Age_type significantly predicts night time sleep, with Children and Newborns sleeping significantly more than Adults. Elders do not differ significantly from Adults, and the model explains about 14.6% of the variance in sleep duration (R² = 0.1456). 
+
+```{r}
+# Model 2: Predict nighttime sleep using gender
+fit2 <- lm(Night_sleep ~ gender, data = sleep_night)
+summary(fit2)
+
+lm(formula = Night_sleep ~ gender, data = sleep_night)
+```
+
+The model shows that gender does not significantly predict night time sleep duration. Difference that is not statistically significant (p = 0.704).
+
+```{r}
+# Model 3: Predict night time sleep using age
+fit3 <- lm(Night_sleep ~ age, data = sleep_night)
+summary(fit3)
+
+lm(formula = Night_sleep ~ age, data = sleep_night)
+```
+
+The model indicates that age is a statistically significant predictor of night time sleep, with each additional year of age associated with a decrease of ~0.018 hours (just over 1 minute) in sleep duration (p = 0.00095). However, the effect size is small and the model explains only ~5.4% of the variance in night time sleep (R-squared:  0.05383). 
+
+```{r}
+ggplot(sleep_night, aes(x = Night_sleep, y = age)) +
+  geom_point(color = "black", size = 1.8) +
+  geom_smooth(method = "lm", color = "black", se = FALSE, linewidth = 0.8) +
+  labs(title = "Age vs Night time sleep",
+       x = "Night time sleep (hrs, 22:00–08:00)",
+       y = "Age (years)") +
+  theme_minimal(base_size = 12) 
+```
+
+```{r}
+# Model 4: Predict nighttime sleep using group (insomnia status)
+fit4 <- lm(Night_sleep ~ group, data = sleep_night)
+summary(fit4)
+
+lm(formula = Night_sleep ~ group, data = sleep_night)
+```
+
+This model shows that group is a strong and highly significant predictor of sleep duration (p < 2e-16). On average, individuals in the Regular (Normal) group sleep 1.85 hours more than those in the Insomniac group.
+
+```{r}
+ggplot(sleep_night, aes(x = group, y = Night_sleep)) +
+  geom_jitter(width = 0.2, height = 0, color = "black", size = 1.8, alpha = 0.6) +
+  stat_summary(fun = mean, geom = "crossbar", width = 0.3, color = "black", fatten = 0.8) +
+  labs(title = "Night time sleep duration by group",
+       x = "Group", y = "Nighttime Sleep (hrs)") +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
