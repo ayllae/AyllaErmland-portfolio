@@ -14,14 +14,14 @@ website:
             file: starter-analysis-exercise/starter-analysis-exercise.html
           - text: "READy Exercise"
             file: ready-exercise/ready-exercise.html
-          - text: "Individual Project"
-            file: Individual-project/Manuscript_copy.html
           - text: "Data Exercise"
             file: data-exercise/data-exercise.html
           - text: "Data Analysis Exercise"
             file: cdcdata-exercise/cdcdata-exercise.html
           - text: "Presentation Exercise"
             file: presentation-exercise/presentation-exercise.html
+          - text: "Fitting Exercise"
+            file: fitting-exercise/fitting-exercise.html
     right:
       - icon: github 
         href: https://github.com/ayllae/AyllaErmland-portfolio       
