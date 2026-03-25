@@ -320,3 +320,128 @@ metrics(knn_pred, truth = Y, estimate = .pred)
 ```
 
 A k-nearest neighbors regression model was also fitted to predict total drug exposure (Y). The performance of the kNN model was worse than the linear regression models, with a higher RMSE and a lower R² value. This suggests that the relationship between dose and total drug exposure is relatively simple and can be captured well by both linear model and k-nearest model. In this case, the kNN approach does not improve predictive performance.
+
+**Module 10: Model Improvement**
+
+**Model performance assessment 1:**
+Prepare data by removing RACE variable and split dataset into 75/25
+```{r}
+#Step 1: remove RACE variable:
+final_data2 <- final_data %>%
+  select(-RACE)
+
+#Set seed for random variability
+rngseed = 1234
+set.seed(rngseed)
+
+#75/25 split
+data_split <- initial_split(final_data2, prop = 0.75)
+train_data <- training(data_split)
+test_data <- testing(data_split)
+```
+
+Now, define model: 
+```{r}
+# Linear regression model
+lm_model <- linear_reg() %>%
+  set_engine("lm")
+```
+
+Fit the two models using the training data only:
+
+**Model 1: DOSE only**
+```{r}
+lm_fit_dose <- lm_model %>%
+  fit(Y ~ DOSE, data = train_data)
+```
+**Model 2: all predictors**
+```{r}
+lm_fit_all <- lm_model %>%
+  fit(Y ~ DOSE + AGE + SEX + WT + HT, data = train_data)
+```
+
+Predictions on training data
+
+```{r}
+# Model 1 predictions
+pred_dose_train <- predict(lm_fit_dose, train_data) %>%
+  bind_cols(train_data)
+
+# Model 2 predictions
+pred_all_train <- predict(lm_fit_all, train_data) %>%
+  bind_cols(train_data)
+```
+
+Compute RMSE for both models:
+
+```{r}
+rmse_dose <- rmse(pred_dose_train, truth = Y, estimate = .pred)
+rmse_all  <- rmse(pred_all_train, truth = Y, estimate = .pred)
+
+rmse_dose
+rmse_all
+```
+
+Null model:
+
+```{r}
+# Compute mean of Y in training data
+mean_Y <- mean(train_data$Y)
+
+# Create predictions = mean
+null_pred <- train_data %>%
+  mutate(.pred = mean_Y)
+
+# Compute RMSE
+rmse_null <- rmse(null_pred, truth = Y, estimate = .pred)
+
+rmse_null
+```
+
+The null model, which just predicts the average value of Y for everyone, has the highest RMSE (~948), so it performs the worst. That makes sense since it doesn’t use any information from the predictors. Model 1, using only DOSE, brings the RMSE down quite a bit (~703), which shows that dose alone explains a large part of the variation in total drug exposure. Model 2, which includes all predictors (DOSE, AGE, SEX, WT, HT), has the lowest RMSE (~627), so it performs the best out of the three.
+
+Overall, this suggests that DOSE is the main factor driving drug exposure, but the other variables add a bit of extra predictive power. 
+
+**Model performance assessment 2:**
+
+Set seed again and create cv_folds:
+
+```{r}
+set.seed(1234)
+
+cv_folds <- vfold_cv(train_data, v = 10)
+```
+
+Fit models using cross-validation:
+
+**Model 1: DOSE only**:
+```{r}
+cv_fit_dose <- lm_model %>%
+  fit_resamples(
+    Y ~ DOSE,
+    resamples = cv_folds,
+    metrics = metric_set(rmse)
+  )
+```
+
+**Model 2 (all predictors):**
+```{r}
+cv_fit_all <- lm_model %>%
+  fit_resamples(
+    Y ~ DOSE + AGE + SEX + WT + HT,
+    resamples = cv_folds,
+    metrics = metric_set(rmse)
+  )
+```
+
+ Extract RMSE results:
+```{r}
+collect_metrics(cv_fit_dose)
+collect_metrics(cv_fit_all)
+```
+
+Using 10-fold cross-validation, the RMSE values are slightly different from those obtained on the training data. Model 1 (DOSE only) has an RMSE of about 691, while Model 2 (all predictors) has an RMSE of about 646.
+
+	•	Model 1 from training RMSE = 703 → 691 entire dataset
+	•	Model 2 from training RMSE = 627 → 646 entire dataset
+
