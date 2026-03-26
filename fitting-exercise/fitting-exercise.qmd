@@ -445,3 +445,114 @@ Using 10-fold cross-validation, the RMSE values are slightly different from thos
 	•	Model 1 from training RMSE = 703 → 691 entire dataset
 	•	Model 2 from training RMSE = 627 → 646 entire dataset
 
+# This section is added by Anissa Waller Del Valle 
+
+```{r}
+# null model predictions
+mean_Y <- mean(train_data$Y)
+pred_null_train <- train_data %>%
+  mutate(.pred = mean_Y,
+         model = "Null")
+
+# model 1 predictions (DOSE)
+pred_dose_train <- predict(lm_fit_dose, train_data) %>%
+  bind_cols(train_data) %>%
+  mutate(model = "Dose")
+
+# model 2 predictions (all predictors)
+pred_all_train <- predict(lm_fit_all, train_data) %>%
+  bind_cols(train_data) %>%
+  mutate(model = "All")
+
+# combine all predictions
+pred_combined <- bind_rows(
+  pred_null_train,
+  pred_dose_train,
+  pred_all_train
+)
+
+# plot observed vs predicted
+ggplot(pred_combined, aes(x = Y, y = .pred, color = model)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0) +
+  coord_cartesian(xlim = c(0, 5000), ylim = c(0, 5000)) +
+  labs(x = "Observed", y = "Predicted") +
+  theme_minimal()
+```
+
+The null model shows a flat horizontal line. This is expected, as it predicts the same mean value of Y for all observations. The dose only model shows three horizontal bands, which happens because dose only takes three values. 
+The model with all predictors performs the best, with points closer to the diagnol line. There is some scatter (at higher observed values, seems underpredicted), suggesting that the model is missing some patterns in the data. 
+
+```{r}
+# Residuals vs predicted (model 2)
+
+pred_all_train <- pred_all_train %>%
+  mutate(residual = .pred - Y)
+
+ggplot(pred_all_train, aes(x = .pred, y = residual)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0) +
+  coord_cartesian(ylim = c(-2500, 2500)) +
+  labs(x = "Predicted", y = "Residuals") +
+  theme_minimal()
+```
+
+There is a lot of scatter. The spread is not even and has a large range. We are seeing more negative residuals at higher predicted values, suggesting that the model is underpredicting for larger Y values, consistent with prior findings. There may be missing patterns or variables. 
+
+```{r}
+# Bootstrap for model 2
+
+library(rsample)
+
+set.seed(1234)
+
+# create bootstraps
+dat_bs <- bootstraps(train_data, times = 100)
+
+# store predictions
+pred_bs <- matrix(NA, nrow = 100, ncol = nrow(train_data))
+
+for(i in 1:100){
+  
+  dat_sample <- rsample::analysis(dat_bs$splits[[i]])
+  
+  fit_bs <- lm_model %>%
+    fit(Y ~ DOSE + AGE + SEX + WT + HT, data = dat_sample)
+  
+  pred_bs[i, ] <- predict(fit_bs, train_data)$.pred
+}
+
+# compute median and CI
+preds <- pred_bs |>
+  apply(2, quantile, c(0.055, 0.5, 0.945)) |>
+  t()
+
+preds_df <- as.data.frame(preds)
+
+# original predictions
+orig_pred <- predict(lm_fit_all, train_data) %>%
+  bind_cols(train_data)
+
+# combine
+plot_data <- orig_pred %>%
+  mutate(
+    median = preds_df$`50%`,
+    lower = preds_df$`5.5%`,
+    upper = preds_df$`94.5%`
+  )
+
+# plot
+ggplot(plot_data, aes(x = Y)) +
+  geom_point(aes(y = .pred), color = "black", alpha = 0.6) +
+  geom_point(aes(y = median), color = "blue", alpha = 0.6) +
+  geom_point(aes(y = lower), color = "red", alpha = 0.4) +
+  geom_point(aes(y = upper), color = "red", alpha = 0.4) +
+  geom_abline(slope = 1, intercept = 0) +
+  coord_cartesian(xlim = c(0, 5000), ylim = c(0, 5000)) +
+  labs(x = "Observed", y = "Predicted") +
+  theme_minimal()
+```
+
+The data points follow a fairly diagnol trend, confirming that this model captures the overall relationship. However, there is a lot of spread (especially at higher observed values), indicating uncertainty. Like before, this suggests that the model is less reliable for larger Y values. 
+
+The model with all predictors performs better than the simpler models, although there is still uncertainty. The consistent higher under prediction at higher values and wide bootstrap variables indicate that the model is either TOO simple, even with the addition of all variables, or that there is important information missing.
