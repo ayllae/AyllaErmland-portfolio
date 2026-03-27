@@ -556,3 +556,46 @@ ggplot(plot_data, aes(x = Y)) +
 The data points follow a fairly diagnol trend, confirming that this model captures the overall relationship. However, there is a lot of spread (especially at higher observed values), indicating uncertainty. Like before, this suggests that the model is less reliable for larger Y values. 
 
 The model with all predictors performs better than the simpler models, although there is still uncertainty. The consistent higher under prediction at higher values and wide bootstrap variables indicate that the model is either TOO simple, even with the addition of all variables, or that there is important information missing.
+
+**This section was written again by Aylla von Ermland:**
+
+Predict on the test data:
+Using my already fitted model (lm_fit_all) and generate predictions for the test set:
+
+```{r}
+# model 2 predictions on test data
+pred_all_test <- predict(lm_fit_all, test_data) %>%
+  bind_cols(test_data) %>%
+  mutate(
+    model = "All",
+    dataset = "Test"
+  )
+
+#label training predictions:
+pred_all_train <- pred_all_train %>%
+  mutate(dataset = "Train")
+
+#Combine train + test predictions:
+pred_final <- bind_rows(
+  pred_all_train,
+  pred_all_test
+)
+```
+
+Plot observed vs. predicted: 
+```{r}
+ggplot(pred_final, aes(x = Y, y = .pred, color = dataset)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0) +
+  coord_cartesian(xlim = c(0, 5000), ylim = c(0, 5000)) +
+  labs(
+    x = "Observed",
+    y = "Predicted",
+    color = "Dataset"
+  ) +
+  theme_minimal()
+```
+
+**Overall model assessment:**
+
+Overall, all models do better than the null model, which is good; the null just predicts the mean and clearly doesn’t capture any real pattern. The Model 1 (dose only) is a small improvement over the null. It makes sense that dose has some effect, but the predictions fall into just a few bands, which is pretty limiting, I wouldn’t consider this model useful for real world prediction. The Model 2 (all predictors) definitely improves things. The RMSE is lower, and the predicted vs observed plot shows points closer to the diagonal. The test data also lines up well with the training data, which suggests the model perform reasonably well and isn’t bad overfit, I would use for "real" world purpose.
