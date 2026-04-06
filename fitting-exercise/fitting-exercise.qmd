@@ -91,7 +91,10 @@ glimpse(final_data)
 summary(final_data)
 
 # Confirm final dataset size
-dim(final_data)  
+dim(final_data) 
+
+# Save cleaned dataset as RDS  ← ADD IT HERE
+saveRDS(final_data, file = here("fitting-exercise", "final_data.rds"))
 ```
 
 **EDA on the cleaned dataset (final_data)**
@@ -599,3 +602,5 @@ ggplot(pred_final, aes(x = Y, y = .pred, color = dataset)) +
 **Overall model assessment:**
 
 Overall, all models do better than the null model, which is good; the null just predicts the mean and clearly doesn’t capture any real pattern. The Model 1 (dose only) is a small improvement over the null. It makes sense that dose has some effect, but the predictions fall into just a few bands, which is pretty limiting, I wouldn’t consider this model useful for real world prediction. The Model 2 (all predictors) definitely improves things. The RMSE is lower, and the predicted vs observed plot shows points closer to the diagonal. The test data also lines up well with the training data, which suggests the model perform reasonably well and isn’t bad overfit, I would use for "real" world purpose.
+
+**Save the cleaned dataset (final_data) as an .rds file 

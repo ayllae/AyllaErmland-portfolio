@@ -22,6 +22,8 @@ website:
             file: presentation-exercise/presentation-exercise.html
           - text: "Fitting Exercise"
             file: fitting-exercise/fitting-exercise.html
+          - text: "Ml Models Exercise"
+            file: ml-models-exercise/ml-models-exercise.qmd
     right:
       - icon: github 
         href: https://github.com/ayllae/AyllaErmland-portfolio       
