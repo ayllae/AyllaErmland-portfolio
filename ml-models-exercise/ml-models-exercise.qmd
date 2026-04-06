@@ -1,0 +1,220 @@
+---
+title: "Ml Models Exercise"
+---
+**Part I: Preliminaries**
+
+```{r}
+# Load required packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+library(GGally)
+
+set.seed(1234)
+
+# Load cleaned dataset
+data <- readRDS(here("ml-models-exercise", "final_data.rds"))
+```
+
+RACE recoding: keep SEX and combine RACE 
+
+```{r}
+data <- data %>%
+  mutate(
+    RACE = case_when(
+      RACE %in% c(7, 88) ~ 3,
+      TRUE ~ as.numeric(as.character(RACE))
+    ),
+    RACE = factor(RACE)
+  )
+
+table(data$RACE)
+```
+
+**Part II: Pairwise correlarion matrix**
+```{r}
+numeric_data <- data %>%
+  select(Y, DOSE, AGE, WT, HT)
+
+GGally::ggpairs(
+  numeric_data,
+  lower = list(continuous = "points"),
+  upper = list(continuous = "cor"),
+  diag  = list(continuous = "densityDiag")
+)
+```
+
+**Part III: Feature engineering BMI.**
+
+BMI formula:
+
+BMI= weight (kg)​/ Height (m)
+
+```{r}
+data <- data %>%
+  mutate(
+    BMI = WT / (HT^2)
+  )
+
+summary(data$BMI)
+```
+
+**Part IV: Model building: no train/test split:**
+```{r}
+formula <- Y ~ DOSE + AGE + SEX + RACE + WT + HT + BMI
+
+# Linear model
+lm_model <- linear_reg() %>%
+  set_engine("lm")
+
+# LASSO (tunable)
+lasso_model <- linear_reg(penalty = tune(), mixture = 1) %>%
+  set_engine("glmnet")
+
+# Random Forest (tunable)
+rf_model <- rand_forest(
+  trees = 500,
+  mtry = tune(),
+  min_n = tune()
+) %>%
+  set_engine("ranger") %>%
+  set_mode("regression")
+
+# Workflows
+lm_wf <- workflow() %>% add_model(lm_model) %>% add_formula(formula)
+lasso_wf <- workflow() %>% add_model(lasso_model) %>% add_formula(formula)
+rf_wf <- workflow() %>% add_model(rf_model) %>% add_formula(formula)
+```
+
+**Part V: First Fit (NO CV and NO Tunning):**
+```{r}
+rngseed <- 1234
+set.seed(rngseed)
+
+# Models without tuning
+lm_model2 <- linear_reg() %>% set_engine("lm")
+
+lasso_model2 <- linear_reg(penalty = 0.1, mixture = 1) %>%
+  set_engine("glmnet")
+
+rf_model2 <- rand_forest() %>%
+  set_engine("ranger", seed = rngseed) %>%
+  set_mode("regression")
+
+# Workflows
+lm_wf2 <- workflow() %>% add_model(lm_model2) %>% add_formula(formula)
+lasso_wf2 <- workflow() %>% add_model(lasso_model2) %>% add_formula(formula)
+rf_wf2 <- workflow() %>% add_model(rf_model2) %>% add_formula(formula)
+
+# Fit models
+lm_fit2 <- fit(lm_wf2, data)
+lasso_fit2 <- fit(lasso_wf2, data)
+rf_fit2 <- fit(rf_wf2, data)
+```
+
+Predictions + RSME:
+
+```{r}
+rmse(bind_cols(data, predict(lm_fit2, data)), truth = Y, estimate = .pred)
+rmse(bind_cols(data, predict(lasso_fit2, data)), truth = Y, estimate = .pred)
+rmse(bind_cols(data, predict(rf_fit2, data)), truth = Y, estimate = .pred)
+```
+
+**Part VI: Tunning the models in the wrong way: without cross-validation (CV)**
+
+```{r}
+apparent_resamples <- apparent(data)
+
+#LASSO:
+lasso_grid2 <- tibble(penalty = 10^seq(-5, 2, length.out = 50))
+
+lasso_bad <- tune_grid(
+  lasso_wf,
+  resamples = apparent_resamples,
+  grid = lasso_grid2,
+  metrics = metric_set(rmse)
+)
+
+collect_metrics(lasso_bad)
+
+#Random forest:
+rf_model3 <- rand_forest(
+  trees = 300,
+  mtry = tune(),
+  min_n = tune()
+) %>%
+  set_engine("ranger") %>%
+  set_mode("regression")
+
+rf_wf3 <- workflow() %>%
+  add_model(rf_model3) %>%
+  add_formula(formula)
+
+rf_grid2 <- grid_regular(
+  mtry(range = c(1, 7)),
+  min_n(range = c(1, 21)),
+  levels = 7
+)
+
+rf_bad <- tune_grid(
+  rf_wf3,
+  resamples = apparent_resamples,
+  grid = rf_grid2,
+  metrics = metric_set(rmse)
+)
+
+collect_metrics(rf_bad)
+```
+
+**Part VII: Propoer tuning with CV:**
+
+```{r}
+set.seed(1234)
+
+cv_folds <- vfold_cv(data, v = 5, repeats = 5)
+```
+
+**Tune LASSO:**
+```{r}
+lasso_good <- tune_grid(
+  lasso_wf,
+  resamples = cv_folds,
+  grid = lasso_grid2,
+  metrics = metric_set(rmse)
+)
+
+autoplot(lasso_good)
+```
+
+Tuning Random Forest:
+```{r}
+rf_good <- tune_grid(
+  rf_wf3,
+  resamples = cv_folds,
+  grid = rf_grid2,
+  metrics = metric_set(rmse)
+)
+
+autoplot(rf_good)
+```
+
+Linear model with cv:
+```{r}
+lm_results <- fit_resamples(
+  lm_wf,
+  resamples = cv_folds,
+  metrics = metric_set(rmse, rsq)
+)
+
+collect_metrics(lm_results)
+```
+
+**Discussion:**
+Overall, this exercise shows that more complex models like random forests can look much better at first (RMSE ~356), but that’s because they’re overfitting when evaluated on the same data. Once we use proper cross-validation, performance becomes more realistic (RMSE ~610), and the advantage of complex models disappears. LASSO ends up behaving like the linear model, and both perform similarly.
+
+LASSO behaves like the linear model because the optimal penalty value is very close to zero. When the penalty is near zero, there is essentially no regularization, so the coefficients are not shrunk and the model is the same as ordinary linear regression. In this dataset, the predictors are already informative and not too noisy, so shrinking them does not improve performance. As a result, LASSO ends up giving the same results as the linear model.
+
+In the end, it shows that while complex models can fit data really well, you need proper validation to trust the results otherwise, you’ll be overly optimistic about how well your model actually works.
+
+
+
