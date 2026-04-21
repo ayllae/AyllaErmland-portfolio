@@ -1,0 +1,185 @@
+---
+Title: "Tidy Tuesday Exercise"
+---
+The Tidy Tuesday Exercise for this week (04/14) is Bird Sightings at Sea.
+
+## Overview
+
+This analysis uses the TidyTuesday **Bird Sightings at Sea** dataset. The data come from Te Papa Tongarewa, Museum of New Zealand, and contain 10-minute seabird count records made from ships near New Zealand from 1969 to 1990.
+
+## Question: 
+
+**Can ship activity and season predict the number of birds seen in a 10-minute census?** 
+
+A 10-minute census period is A standardized observation window where researchers counted birds for exactly 10 minutes from a ship.
+
+- Outcome: `log_total_birds = log1p(total_birds)`
+- Key predictors: `activity`, `season`
+
+## Exploratory Data Analysis: 
+
+## Load libraries: 
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(lubridate)
+library(janitor)
+library(broom)
+set.seed(123)
+```
+
+## Load data
+
+```{r}
+base_url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-14"
+birds <- read_csv(file.path(base_url, "birds.csv")) |> clean_names()
+ships <- read_csv(file.path(base_url, "ships.csv")) |> clean_names()
+```
+
+## Cleaning and processing dataset
+
+Data processing involved cleaning the bird count data, handling missing values, and aggregating observations to the 10-minute census level before merging with ship data.
+
+Aggregate to record level:
+
+```{r}
+birds_sum <- birds |>
+  mutate(count = na_if(count, 99999)) |>
+  group_by(record_id) |>
+  summarise(total_birds = sum(count, na.rm = TRUE), .groups = "drop")
+
+analysis_data <- ships |>
+  left_join(birds_sum, by = "record_id") |>
+  mutate(
+    total_birds = replace_na(total_birds, 0),
+    log_total_birds = log1p(total_birds),
+    date = as.Date(date),
+    season = factor(season),
+    activity = factor(activity)
+  )
+```
+
+## Exploratory data analysis
+
+### 1. Distribution of birds
+
+```{r}
+ggplot(analysis_data, aes(x = log_total_birds)) +
+  geom_histogram(bins = 30, fill = "steelblue") +
+  labs(title = "Distribution of bird counts (log scale)")
+```
+
+### 2. Birds by activity
+
+```{r}
+ggplot(analysis_data, aes(x = activity, y = total_birds)) +
+  geom_boxplot() +
+  scale_y_log10() +
+  coord_flip() +
+  labs(title = "Bird counts by ship activity")
+```
+
+For this analysis, I selected **season** and **activity** as the main predictors. **Season** was included because bird abundance is likely influenced by seasonal patterns such as migration, breeding cycles, and food availability. **Activity** (what the ship is doing) was included because certain activities, such as fishing or waste disposal, may attract birds and increase observed counts.
+
+## Modeling data
+
+```{r}
+model_data <- analysis_data |>
+  select(log_total_birds, season, activity) |>
+  drop_na()
+```
+
+## Train/test split
+
+```{r}
+split <- initial_split(model_data, prop = 0.8)
+train <- training(split)
+test <- testing(split)
+folds <- vfold_cv(train, v = 5)
+```
+
+## Defines the model formula
+```{r}
+rec <- recipe(log_total_birds ~ ., data = train) |>
+  step_dummy(all_nominal_predictors())
+```
+
+## Models
+
+```{r}
+lm_spec <- linear_reg() |> set_engine("lm")
+rf_spec <- rand_forest(trees = 200) |> set_engine("ranger") |> set_mode("regression")
+knn_spec <- nearest_neighbor(neighbors = 5) |> set_engine("kknn") |> set_mode("regression")
+```
+
+## Workflows
+
+```{r}
+lm_wf <- workflow() |> add_model(lm_spec) |> add_recipe(rec)
+rf_wf <- workflow() |> add_model(rf_spec) |> add_recipe(rec)
+knn_wf <- workflow() |> add_model(knn_spec) |> add_recipe(rec)
+```
+
+## Fit with CV
+
+```{r}
+metrics <- metric_set(rmse, rsq)
+
+lm_res <- fit_resamples(lm_wf, folds, metrics = metrics)
+rf_res <- fit_resamples(rf_wf, folds, metrics = metrics)
+knn_res <- fit_resamples(knn_wf, folds, metrics = metrics)
+```
+
+## Compare models
+
+```{r}
+bind_rows(
+  collect_metrics(lm_res) |> mutate(model = "lm"),
+  collect_metrics(rf_res) |> mutate(model = "rf"),
+  collect_metrics(knn_res) |> mutate(model = "knn")
+)
+```
+
+## Choose final model
+I selected the random forest model as the final model. Although its performance was similar to linear regression, random forests can capture nonlinear relationships and interactions between variables. This makes it a more flexible choice for ecological data, where relationships are often complex.
+
+```{r}
+final_model <- rf_wf |> fit(train)
+```
+
+Predicted vs actual plot: 
+
+```{r}
+preds <- predict(final_model, test) |> bind_cols(test)
+
+ggplot(preds, aes(x = .pred, y = log_total_birds)) +
+  geom_point(alpha = 0.4, color = "steelblue") +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = "red") +
+  labs(
+    title = "Predicted vs Actual Values",
+    x = "Predicted",
+    y = "Actual"
+  )
+```
+
+This plot compares predicted and actual values from the final model. The points are widely scattered around the diagonal line, indicating that the model has limited predictive accuracy.
+The predicted values are concentrated within a narrow range, while the actual values vary much more widely. This suggests that the model is not capturing the full variability in bird counts, particularly for higher values. This pattern is expected because the model uses only a small number of predictors (season and activity), which are insufficient to fully explain bird abundance.
+
+## Test set evaluation
+```{r}
+preds <- predict(final_model, test) |> bind_cols(test)
+metrics(preds, truth = log_total_birds, estimate = .pred)
+```
+
+Model	RMSE	R²
+LM	~1.46	~0.043
+RF	~1.46	~0.043
+KNN	~1.61	~0.005
+
+The linear regression and random forest models performed similarly, with RMSE around 1.46 and low R² (~0.04), indicating limited predictive power. The k-nearest neighbors model performed worse, suggesting it is less suitable for this dataset. Overall, the models explain only a small portion of the variability in bird counts, indicating that important predictors are likely not considered.
+
+This analysis examined whether ship activity and season can predict bird abundance during 10-minute census periods.
+The exploratory analysis showed that bird counts are highly skewed and vary across ship activities. This suggests that human activity may influence bird presence. Three models were fitted using the tidymodels framework. Random forest and linear regression performed similarly, while k-nearest neighbors performed worse. The random forest model was selected due to its flexibility.
+Final evaluation on the test set showed modest predictive performance, with low R². This suggests that while activity and season contribute some information, many important factors affecting bird abundance are not captured in the model. Overall, this analysis demonstrates that bird abundance is difficult to predict using only a few variables, and more detailed environmental or ecological predictors would likely improve model performance.
+
