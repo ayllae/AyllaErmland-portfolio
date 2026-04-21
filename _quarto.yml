@@ -25,7 +25,7 @@ website:
           - text: "Ml Models Exercise"
             file: ml-models-exercise/ml-models-exercise.qmd
           - text: "Tidy Tuesday Exercise"
-            file: tidytuesday-exercise/tidytuesday-exercise.html
+            file: tidytuesday-exercise/tidytuesday-exercise.qmd
     right:
       - icon: github 
         href: https://github.com/ayllae/AyllaErmland-portfolio       
